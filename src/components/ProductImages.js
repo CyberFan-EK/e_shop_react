@@ -1,19 +1,51 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState } from "react";
+import styled from "styled-components";
 
-const ProductImages = () => {
-  return <h4>product images</h4>
-}
+const ProductImages = ({ images = [] }) => {
+  const [main, setImage] = useState(images[0]);
+
+  const showImage = (index) => {
+    setImage(images[index]);
+  };
+  if (!main) {
+    return null;
+  }
+  const { filename, url } = main;
+  return (
+    <Wrapper>
+      <div className="main">
+        <img src={url} alt={filename} />
+        <div className="gallery">
+          {images.map((image, index) => {
+            const { filename, url, id } = image;
+            return (
+              <img
+                key={id}
+                onClick={() => {
+                  showImage(index);
+                }}
+                src={url}
+                alt={filename}
+                className={`${url === main.url ? "active" : null}`}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.section`
   .main {
     height: 600px;
   }
   img {
-    width: 100%;
+    max-width: 100%;
     display: block;
     border-radius: var(--radius);
     object-fit: cover;
+    max-height: 400px;
   }
   .gallery {
     margin-top: 1rem;
@@ -48,6 +80,6 @@ const Wrapper = styled.section`
       }
     }
   }
-`
+`;
 
-export default ProductImages
+export default ProductImages;
